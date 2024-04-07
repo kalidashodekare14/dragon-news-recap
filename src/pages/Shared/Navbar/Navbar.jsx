@@ -1,7 +1,11 @@
 import { Link, NavLink } from "react-router-dom";
 import userDefaultPic from '../../../assets/user.png';
+import { useContext } from "react";
+import { AuthContext } from "../../../AuthProvider/AuthProvider";
 
 const Navbar = () => {
+
+    const { user, getSingOut } = useContext(AuthContext)
 
     const navLinks = <>
         <li><NavLink to="/">Home</NavLink></li>
@@ -9,6 +13,11 @@ const Navbar = () => {
         <li><NavLink to="/career">Career</NavLink></li>
 
     </>
+
+    const handleSingOut = () =>{
+        getSingOut()
+
+    }
 
     return (
         <div className="navbar bg-base-100">
@@ -29,15 +38,30 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
+                <div>
+                    {
+                        user && <p>{user.email}</p>
+                    }
+                </div>
                 <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                     <div className="w-10 rounded-full">
                         <img src={userDefaultPic} />
                     </div>
                 </label>
-                <Link>
-                    <button className="btn">Login</button>
-                </Link>
+
+                <div>
+                {
+                    user ? <div>
+                        <span>{user.email}</span>
+                        <button onClick={handleSingOut} className='btn'>Sing Out</button>
+                    </div>
+                        : <Link  to="./sing_in"><button className="btn">Login</button></Link>
+
+                }
+                </div>
+
             </div>
+
         </div>
     );
 };
